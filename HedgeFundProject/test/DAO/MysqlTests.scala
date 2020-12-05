@@ -39,7 +39,7 @@ case class UserProfile(id: Int,
                        lastName: String)
 
 class UserProfileRepository_MySQL {
-  lazy val config = DatabaseConfig.forConfig[JdbcProfile]("MySQL")
+  lazy val config = DatabaseConfig.forConfig[JdbcProfile]("slick.dbs.default")
   val db: JdbcProfile#Backend#Database = config.db
   val userProfileQuery: TableQuery[UserProfiles] = TableQuery[UserProfiles]
 
