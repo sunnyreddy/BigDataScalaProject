@@ -1,23 +1,32 @@
 package controllers
 
+import actors._
+import akka.actor.ActorSystem
+import akka.util.Timeout
 import javax.inject._
 import models.login.LoginHandler
 import models.DAO.UserTable
 import play.api.data.Forms._
 import play.api.data._
 import play.api.mvc._
+import play.api.data.format.Formats._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.concurrent.duration.DurationInt
 
 // Case class to validate login form
 case class LoginForm(username: String, password: String)
 
 // Case class to validate sign-up form
-case class SignUpForm(name: String, email: String, city: String, username: String, password: String)
+case class SignUpForm(username: String, password: String, name: String, email: String)
 
 @Singleton
-class HomeController @Inject()(val cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
+class HomeController @Inject()(system: ActorSystem,cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
+  //actors
+  val userActor = system.actorOf(UserActor.props, "user-actor")
+
+  implicit val timeout: Timeout = 5 minutes
 
   val loginData = Form(mapping(
     "Username" -> nonEmptyText,
@@ -25,11 +34,10 @@ class HomeController @Inject()(val cc: MessagesControllerComponents) extends Mes
   )(LoginForm.apply)(LoginForm.unapply))
 
   val signupData = Form(mapping(
-    "Name" -> nonEmptyText,
-    "Email" -> email,
-    "portfolioID" -> nonEmptyText,
     "Username" -> nonEmptyText,
-    "Password" -> nonEmptyText
+    "Password" -> nonEmptyText,
+    "Name" -> nonEmptyText,
+    "Email" -> email
   )(SignUpForm.apply)(SignUpForm.unapply))
 
   def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
@@ -61,7 +69,7 @@ class HomeController @Inject()(val cc: MessagesControllerComponents) extends Mes
       formWithError => Future(BadRequest(views.html.credentials.signup(formWithError))),
       sgd => {
         val handler = new LoginHandler() with UserTable
-        (handler.addUser(sgd.username, sgd.password, sgd.name, sgd.email, sgd.city)).map(b => b match {
+        (handler.addUser(sgd.username, sgd.password, sgd.name, sgd.email,sgd.username+"1",100000.0)).map(b => b match {
           case true => Redirect(routes.HomeController.login())
           case false => Redirect(routes.HomeController.signup()).flashing("error" -> s"**Username already exists")
       })

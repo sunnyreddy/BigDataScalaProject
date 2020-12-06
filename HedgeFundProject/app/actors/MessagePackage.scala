@@ -1,6 +1,6 @@
 package actors
 
-case class UserRegisterMessage(username: String, password: String, name: String, email: String, portfolioID: String)
+case class UserRegisterMessage(username: String, password: String, name: String, email: String, portfolioID: String, availableFund: Float)
 case object RegisterSuccessMessage
 
 case class PurchaseMessage(stockCode: String, quantity: Double)

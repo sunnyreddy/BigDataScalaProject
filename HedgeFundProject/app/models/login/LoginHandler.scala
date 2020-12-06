@@ -8,11 +8,11 @@ import scala.concurrent.Future
 class LoginHandler {
   this: UserTable =>
 
-  def addUser(username: String, password: String, name: String, email: String, portfolioID: String): Future[Boolean] = {
+  def addUser(username: String, password: String, name: String, email: String, portfolioID: String, availableFund:BigDecimal): Future[Boolean] = {
     filter_username(username).map(s => s.length == 1).map(b => b match {
       case true => false
       case false => {
-        val user = User(username, password, name, email, portfolioID)
+        val user = User(username, password, name, email, portfolioID, availableFund)
         insert_user(user)
         true
       }

@@ -8,13 +8,11 @@ import model.DBService
 
 object UserActor {
   def props = Props[UserActor]
-
-
 }
 class UserActor extends Actor {
   import UserActor._
   override def receive: Receive = {
-    case UserRegisterMessage(username, password, name , email , portfolioID) =>
+    case UserRegisterMessage(username, password, name , email , portfolioID, availableFund) =>
       sender() ! "sss"
   }
 
