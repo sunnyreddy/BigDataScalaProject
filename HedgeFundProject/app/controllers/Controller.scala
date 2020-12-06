@@ -55,7 +55,7 @@ class HomeController @Inject()(system: ActorSystem,cc: MessagesControllerCompone
       ld => {
          val handler = new LoginHandler() with UserTable
          (handler.validateUser(ld.username, ld.password)).map(b => b match {
-           case true => Redirect(routes.HomeController.action())
+           case true => Redirect(routes.HomeController.dashboard())
            case false => Redirect(routes.HomeController.login()).flashing("error" -> s"**Username or password is incorrect")
       })
       })
@@ -79,5 +79,9 @@ class HomeController @Inject()(system: ActorSystem,cc: MessagesControllerCompone
 
   def action(): Action[AnyContent] = Action { implicit request =>
     Ok(views.html.Action.action())
+  }
+
+  def dashboard(): Action[AnyContent] = Action { implicit request =>
+    Ok(views.html.portfolio.dashboard())
   }
 }
