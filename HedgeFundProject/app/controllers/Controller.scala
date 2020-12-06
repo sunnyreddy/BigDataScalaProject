@@ -37,28 +37,28 @@ class HomeController @Inject()(val cc: MessagesControllerComponents) extends Mes
   }
 
   def login(): Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.credentials.login(loginData))
+    Ok(views.html.portfolio.login(loginData))
   }
 
   def validateLogin(): Action[AnyContent] = Action.async { implicit request =>
     loginData.bindFromRequest.fold(
-      formWithError => Future(BadRequest(views.html.credentials.login(formWithError))),
+      formWithError => Future(BadRequest(views.html.portfolio.login(formWithError))),
       ld => {
          val handler = new LoginHandler() with UserTable
          (handler.validateUser(ld.username, ld.password)).map(b => b match {
-           case true => Redirect(routes.HomeController.action())
+           case true => Redirect(routes.HomeController.dashboard())
            case false => Redirect(routes.HomeController.login()).flashing("error" -> s"**Username or password is incorrect")
       })
       })
   }
 
   def signup(): Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.credentials.signup(signupData))
+    Ok(views.html.portfolio.signup(signupData))
   }
 
   def validateSignUp(): Action[AnyContent] = Action.async { implicit request =>
     signupData.bindFromRequest.fold(
-      formWithError => Future(BadRequest(views.html.credentials.signup(formWithError))),
+      formWithError => Future(BadRequest(views.html.portfolio.signup(formWithError))),
       sgd => {
         val handler = new LoginHandler() with UserTable
         (handler.addUser(sgd.username, sgd.password, sgd.name, sgd.email, sgd.city)).map(b => b match {
@@ -68,7 +68,11 @@ class HomeController @Inject()(val cc: MessagesControllerComponents) extends Mes
   })
   }
 
-  def action(): Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.Action.action())
+  def dashboard(): Action[AnyContent] = Action { implicit request =>
+    Ok(views.html.portfolio.dashboard())
   }
+
+//  def addPortfolio(): Action[AnyContent] = Action { request =>
+//    Ok(views.html.portfolio.dashboard())
+//  }
 }

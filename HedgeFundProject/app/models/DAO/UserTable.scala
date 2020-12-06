@@ -5,7 +5,7 @@ import scala.concurrent.Future
 case class User(username: String, password: String, name: String, email: String, city: String)
 
 trait UserTable {
-//  this: DbConfiguration =>
+
   import DbConfiguration.config.profile.api._
 
   class Users(tag: Tag) extends Table[User](tag, "USERS") {
