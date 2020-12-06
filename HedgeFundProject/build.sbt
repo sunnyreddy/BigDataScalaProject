@@ -19,8 +19,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
       "org.apache.spark" %% "spark-mllib" % "2.4.0",
   //bigDL
       "com.intel.analytics.bigdl" % "bigdl-SPARK_2.4" % "0.11.0",
-  //
-     // "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test,
+     //play framework
+      "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.2" % Test,
       "com.typesafe.play" %% "play-slick" % "4.0.2",
       "com.typesafe.play" %% "play-slick-evolutions" % "4.0.2",
       //slick
