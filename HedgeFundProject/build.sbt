@@ -25,9 +25,10 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
       "com.typesafe.play" %% "play-slick-evolutions" % "4.0.2",
       //slick
       "com.typesafe.slick" %% "slick" % "3.3.2",
-      "org.slf4j" % "slf4j-nop" % "1.6.4",
+//      "org.slf4j" % "slf4j-nop" % "1.6.4",
       "com.typesafe.slick" %% "slick-hikaricp" % "3.3.2",
-      "mysql" % "mysql-connector-java" % "8.0.15"
+      "mysql" % "mysql-connector-java" % "8.0.15",
+      guice
       )
     )
 

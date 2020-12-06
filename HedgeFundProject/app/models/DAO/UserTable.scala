@@ -3,16 +3,14 @@ package models.DAO
 import scala.concurrent.Future
 import play.api.libs.json._
 
-case class User(username: String, password: String, name: String, email: String, city: String)
-object User {
-  implicit val userJsonFormat = Json.format[User]
-}
+case class User(username: String, password: String, name: String, email: String, portfolioID: String)
+
 
 trait UserTable {
 //  this: DbConfiguration =>
   import DbConfiguration.config.profile.api._
 
-  private class Users(tag: Tag) extends Table[User](tag, "USERS") {
+  class Users(tag: Tag) extends Table[User](tag, "USERS") {
     def username = column[String]("USERNAME", O.Length(24), O.PrimaryKey)
     def password = column[String]("PASSWORD", O.Length(24))
     def name = column[String]("NAME")

@@ -33,7 +33,7 @@ class HomeController @Inject()(val cc: MessagesControllerComponents) extends Mes
   )(SignUpForm.apply)(SignUpForm.unapply))
 
   def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.portfolio.dashboard())
+    Ok(views.html.index())
   }
 
   def login(): Action[AnyContent] = Action { implicit request =>

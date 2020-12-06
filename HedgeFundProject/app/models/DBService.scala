@@ -11,7 +11,4 @@ import scala.concurrent.{Await, Future}
 
 object DBService {
 
-
-
-
 }

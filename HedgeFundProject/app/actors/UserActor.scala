@@ -15,7 +15,7 @@ class UserActor extends Actor {
   import UserActor._
   override def receive: Receive = {
     case UserRegisterMessage(username, password, name , email , portfolioID) =>
-      sender() ! DBService.
+      sender() ! "sss"
   }
 
 }
