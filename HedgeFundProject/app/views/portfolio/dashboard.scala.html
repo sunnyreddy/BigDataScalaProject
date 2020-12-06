@@ -1,0 +1,172 @@
+@()(implicit flash: Flash)
+
+<!--@main("Action") {-->
+<!--@defining(play.core.PlayVersion.current) { version =>-->
+<!--    <body class="landing-page" style="text-align: center">-->
+<!--        <h1 style="color:red">Dashboard</h1>-->
+<!--    </body>-->
+<!--}-->
+<!--}-->
+
+<!DOCTYPE HTML>
+<meta charset="utf-8">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title></title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/assets/stylesheets/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/assets/stylesheets/simple-sidebar.css" rel="stylesheet">
+    <!--<link href="/assets/stylesheets/heroic-features.css" rel="stylesheet">-->
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+
+</head>
+<style> /* set the CSS */
+
+body { font: 12px Arial;}
+
+path {
+  stroke: steelblue;
+  stroke-width: 2;
+  fill: none;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: grey;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 60px;
+  height: 28px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  /*  pointer-events: none;    This line needs to be removed */
+
+}
+
+</style>
+<body>
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand">
+                <a href="#">
+                    Hedge Fund Project
+                </a>
+            </li>
+            <li>
+                <a href="dashboard" id="showDashboard">Dashboard</a>
+            </li>
+<!--            <li>-->
+<!--                <a href="recomendation" id="showRecommendation">Find your perfect listing</a>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--                <a href="profit" >Profit Analysis</a>-->
+<!--            </li>-->
+        </ul>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row" id="graphs">
+                <div class="col-lg-12">
+                    <div id="recommendation" >
+                        <h1>Build your portfolio !!</h1>
+                        @for(a <- 1 to 5) {
+                        <div class="form-group">
+                            <label for="parm1">Please select the Company you want to </label>
+                            <select class="form-control" id="parm1">
+                                <option>Apple</option>
+                                <option>Amazon</option>
+                                <option>Expedia</option>
+                                <option>TripAdvisor</option>
+                                <option>Google</option>
+                                <option>Ebay</option>
+                                <option>FaceBook</option>
+                                <option>MicroSoft</option>
+                                <option>Walmart</option>
+                            </select>
+                            <br>
+                            <select class="form-control" id="parm2">
+                                <option>5</option>
+                                <option>10</option>
+                                <option>15</option>
+                                <option>20</option>
+                                <option>25</option>
+                                <option>30</option>
+                                <option>35</option>
+                                <option>40</option>
+                                <option>50</option>
+                            </select>
+                        }
+                            <br>
+                            <button type="button" id="fetchRecommendation" class="btn btn-primary" onclick="Prediction()">
+                                Add To Portfolio
+                            </button>
+
+                            <div id="a">
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /#page-content-wrapper -->
+
+        </div>
+    </div>
+</div>
+
+</body>
+
+<!-- load the d3.js library -->
+<script type=
+                "text/javascript" src="http://d3js.org/d3.v3.min.js">
+</script>
+
+
+<script src="/assets/javascripts/jquery.js"></script>
+<script src="/assets/javascripts/recommendation.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="/assets/javascripts/bootstrap.min.js"></script>
+
+<!-- Menu Toggle Script -->
+<script>
+                $(document).ready(function() {
+                  $("#wrapper").toggleClass("toggled");
+                });
+
+        </script>
+
+
+
