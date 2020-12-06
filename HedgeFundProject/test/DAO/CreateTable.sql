@@ -20,8 +20,12 @@ CREATE TABLE protfolios (
  FOREIGN KEY (stockID) REFERENCES stocks_daily_adjusted(stockID)
  )
 
-CREATE TABLE users (
- id				INT IDENTITY (1, 1) PRIMARY KEY,
- userName		VARCHAR(100) NOT NULL,
- protfolioID	INT NOT NULL,
- FOREIGN KEY (protfolioID) REFERENCES protfolios(protfolioID)
+CREATE TABLE USERS (
+ username  VARCHAR(100) NOT NULL,
+ password VARCHAR(100) NOT NULL,
+ name  VARCHAR(100) NOT NULL,
+ email  VARCHAR(100) NOT NULL,
+ portfolioID  VARCHAR(100) NOT NULL,
+ availableFund  Float NOT NULL,
+ PRIMARY KEY (username)
+)

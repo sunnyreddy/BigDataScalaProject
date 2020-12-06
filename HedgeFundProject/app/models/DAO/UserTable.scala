@@ -3,7 +3,7 @@ package models.DAO
 import scala.concurrent.Future
 import play.api.libs.json._
 
-case class User(username: String, password: String, name: String, email: String, portfolioID: String)
+case class User(username: String, password: String, name: String, email: String, portfolioID: String, availableFund: BigDecimal)
 
 
 trait UserTable {
@@ -16,7 +16,8 @@ trait UserTable {
     def name = column[String]("NAME")
     def email = column[String]("EMAIL", O.Length(50))
     def portfolioID = column[String]("portfolioID")
-    def * = (username, password, name, email, portfolioID) <> (User.tupled, User.unapply)
+    def availableFund = column[BigDecimal]("availableFund")
+    def * = (username, password, name, email, portfolioID, availableFund) <> (User.tupled, User.unapply)
   }
 
   val allUsers = TableQuery[Users]
