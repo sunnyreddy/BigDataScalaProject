@@ -1,7 +1,7 @@
 package controllers
 
 import actors._
-import akka.actor.ActorSystem
+import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.util.Timeout
 import javax.inject._
 import models.login.LoginHandler
@@ -24,7 +24,7 @@ case class SignUpForm(username: String, password: String, name: String, email: S
 @Singleton
 class HomeController @Inject()(system: ActorSystem,cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
   //actors
-  val userActor = system.actorOf(UserActor.props, "user-actor")
+//  val bossActor = ActorSystem().actorOf(Props[BossActor])
 
   implicit val timeout: Timeout = 5 minutes
 
@@ -83,4 +83,8 @@ class HomeController @Inject()(system: ActorSystem,cc: MessagesControllerCompone
   def dashboard(): Action[AnyContent] = Action { implicit request =>
     Ok(views.html.portfolio.dashboard())
   }
+
+//  def test(): Action[AnyContent] = Action { implicit request =>
+//    Ok(views.html.test())
+//  }
 }

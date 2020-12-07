@@ -1,5 +1,4 @@
 package models.login
-
 import models.DAO.{User, UserTable}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -12,7 +11,7 @@ class LoginHandler {
     filter_username(username).map(s => s.length == 1).map(b => b match {
       case true => false
       case false => {
-        val user = User(username, password, name, email, portfolioID, availableFund)
+        val user = User(username, password, name, email, username+"1", 10000)
         insert_user(user)
         true
       }
