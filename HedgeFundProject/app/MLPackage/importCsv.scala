@@ -1,5 +1,6 @@
 package getData
 import MLPackage.SparkSessionStarter.spark
+import org.apache.spark.sql.functions.lit
 import org.apache.spark.sql.types.{DateType, DoubleType, IntegerType, StringType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
@@ -21,7 +22,8 @@ object importCsv extends App{
     val res = scala.io.Source.fromURL(uri).mkString.stripMargin.lines.toList
     val csvData: Dataset[String] = spark.sparkContext.parallelize(res).toDS()
     val Data = spark.read.option("header", true).option("inferSchema",true).csv(csvData)
-    Data
+    val DataWithName = Data.withColumn("Name", lit(s"${stockID}"))
+    DataWithName
   }
 
   def getTrainingData(Data:DataFrame): DataFrame= {
@@ -30,5 +32,6 @@ object importCsv extends App{
   def getTestingData(Data:DataFrame): DataFrame= {
     ???
   }
+
 
 }

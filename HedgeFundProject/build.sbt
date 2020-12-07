@@ -28,7 +28,9 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 //      "org.slf4j" % "slf4j-nop" % "1.6.4",
       "com.typesafe.slick" %% "slick-hikaricp" % "3.3.2",
       "mysql" % "mysql-connector-java" % "8.0.15",
-      guice
+      guice,
+      //time series for spark
+      "com.cloudera.sparkts" % "sparkts" % "0.4.0"
       )
     )
 
