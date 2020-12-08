@@ -2,18 +2,20 @@ package models.DAO
 
 import scala.concurrent.Future
 
-case class Portfolio(protfolioID: String, stockCode: String, quantity: Double)
+case class Portfolio(portfolioID: String, stockCode: String, quantity: Double, rule: Double)
 
 trait PortfolioTable {
 
   import DbConfiguration.config.profile.api._
 
-    class Portfolios(tag: Tag) extends Table[Portfolio](tag, "Portfolio") {
-      def id: Rep[Int] = column[Int]("id", O.PrimaryKey, O.AutoInc)
-      def portfolioID = column[String]("PortfolioID")
+    class Portfolios(tag: Tag) extends Table[Portfolio](tag, "portfolio") {
+      //def id: Rep[Int] = column[Int]("id", O.PrimaryKey, O.AutoInc)
+      def portfolioID = column[String]("PortfolioID", O.PrimaryKey)
       def stockCode = column[String]("stockCode")
       def quantity = column[Double]("quantity")
-      def * = (portfolioID, stockCode, quantity) <> (Portfolio.tupled, Portfolio.unapply)
+      def rule = column[Double]("ruleLimit")
+
+      def * = (portfolioID, stockCode, quantity, rule) <> (Portfolio.tupled, Portfolio.unapply)
     }
 
     val portfolios = TableQuery[Portfolios]
