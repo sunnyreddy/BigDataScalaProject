@@ -101,7 +101,7 @@ div.tooltip {
                 <div class="col-lg-12">
                     <div id="recommendation" >
                         <h1>Build your portfolio !!</h1>
-                        @for(a <- 1 to 5) {
+
                         <div class="form-group">
                             <label for="parm1">Please select the Company you want to </label>
                             <select class="form-control" id="parm1">
@@ -116,25 +116,29 @@ div.tooltip {
                                 <option>Walmart</option>
                             </select>
                             <br>
-                            <select class="form-control" id="parm2">
-                                <option>5</option>
-                                <option>10</option>
-                                <option>15</option>
-                                <option>20</option>
-                                <option>25</option>
-                                <option>30</option>
-                                <option>35</option>
-                                <option>40</option>
-                                <option>50</option>
-                            </select>
-                        }
+<!--                            <select class="form-control" id="parm2">-->
+<!--                                <option>5</option>-->
+<!--                                <option>10</option>-->
+<!--                                <option>15</option>-->
+<!--                                <option>20</option>-->
+<!--                                <option>25</option>-->
+<!--                                <option>30</option>-->
+<!--                                <option>35</option>-->
+<!--                                <option>40</option>-->
+<!--                                <option>50</option>-->
+<!--                            </select>-->
+                            <br>
+                            <input type="range" value="0" max="10" id="rule" oninput="num.value = this.value">
+                            <output id="num" style="font-size:30px">0</output>
+                            <label for="rule">Rule Limit</label>
                             <br>
                             <button type="button" id="fetchRecommendation" class="btn btn-primary" onclick="Prediction()">
                                 Add To Portfolio
                             </button>
 
-                            <div id="a">
-                            </div>
+<!--                            <button type="button" id="fetchRecommendation" class="btn btn-primary" onclick="Prediction()">-->
+<!--                                Edit Portfolio-->
+<!--                            </button>-->
 
                         </div>
                     </div>
@@ -162,11 +166,11 @@ div.tooltip {
 
 <!-- Menu Toggle Script -->
 <script>
-                $(document).ready(function() {
-                  $("#wrapper").toggleClass("toggled");
-                });
+        $(document).ready(function() {
+          $("#wrapper").toggleClass("toggled");
+        });
 
-        </script>
+</script>
 
 
 
