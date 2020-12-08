@@ -95,6 +95,7 @@ class HomeController @Inject()(system: ActorSystem,cc: MessagesControllerCompone
         val handler = new PortfolioHandler() with PortfolioTable
         (handler.addPortfolio(sgd.portfolioID,sgd.stockCode,100, sgd.rule.toDouble)).map(b => b match {
           case true => Redirect(routes.HomeController.dashboard())
+          case false => Redirect(routes.HomeController.dashboard()).flashing("error" -> s"already have portfolio so go check ML")
         })
       })
   }

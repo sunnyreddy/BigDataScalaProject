@@ -109,14 +109,9 @@ div.tooltip {
                         @helper.CSRF.formField
                         <p style="color: #2d2d2d; font-family:Arial; text-align: center; font-size: 12px">@flash.get("error")</p>
                         @helper.inputText(portfolioData("PortfolioID"), '_label -> null, 'placeholder -> "username1...", '_showConstraints -> false)
-                        @helper.select(
-                            field = portfolioData("StockCode"),
-                            helper.options("" -> "Choose a Stock", "AAPL" -> "APPLE INC", "MSFT" -> "MICROSOFT")
-                        )
-                        <!--@helper.inputText(portfolioData("StockCode"), '_label -> null, 'placeholder -> "AAPL MSFT etc", '_showConstraints -> false)
-
+                        @helper.inputText(portfolioData("StockCode"), '_label -> null, 'placeholder -> "AAPL MSFT etc", '_showConstraints -> false)
                         @helper.inputText(portfolioData("Quantity"), '_label -> null, 'placeholder -> "quantity", '_showConstraints -> false)
-                        -->
+
                         @helper.inputText(portfolioData("Rule"), '_label -> null, 'placeholder -> "rule value", '_showConstraints -> false)
                         <input type="submit" value="add to Portfolio"/>
                         }
