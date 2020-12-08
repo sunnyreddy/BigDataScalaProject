@@ -5,8 +5,10 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
++nocsrf
 GET     /login                      controllers.HomeController.login
 GET     /signup                     controllers.HomeController.signup
++nocsrf
 POST    /validateLogin              controllers.HomeController.validateLogin
 POST    /validateSignUp             controllers.HomeController.validateSignUp
 GET     /action                     controllers.HomeController.action
