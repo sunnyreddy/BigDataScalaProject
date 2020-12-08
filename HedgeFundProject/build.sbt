@@ -30,7 +30,11 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
       "mysql" % "mysql-connector-java" % "8.0.15",
       guice,
       //time series for spark
-      "com.cloudera.sparkts" % "sparkts" % "0.4.0"
+      "com.cloudera.sparkts" % "sparkts" % "0.4.0",
+      //mailer
+      "com.typesafe.play" %% "play-mailer" % "7.0.1",
+      "com.typesafe.play" %% "play-mailer-guice" % "7.0.1",
+//      "com.typesafe.play.plugins" %% "play-plugins-mailer" % "2.3.1"
       )
     )
 
