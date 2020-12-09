@@ -1,15 +1,7 @@
-@()(implicit flash: Flash)
+@(portfolioData: Form[PortfolioForm])(implicit request: MessagesRequestHeader, flash: Flash)
 
-<!--@main("Action") {-->
-<!--@defining(play.core.PlayVersion.current) { version =>-->
-<!--    <body class="landing-page" style="text-align: center">-->
-<!--        <h1 style="color:red">Dashboard</h1>-->
-<!--    </body>-->
-<!--}-->
-<!--}-->
-
-<!DOCTYPE HTML>
-<meta charset="utf-8">
+@main("dashboard") {
+@defining(play.core.PlayVersion.current) { version =>
 <head>
 
     <meta charset="utf-8">
@@ -35,7 +27,24 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <!-- load the d3.js library -->
+    <script type=
+                    "text/javascript" src="http://d3js.org/d3.v3.min.js">
+    </script>
 
+
+    <script src="/assets/javascripts/jquery.js"></script>
+<!--    <script src="/assets/javascripts/recommendation.js"></script>-->
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/assets/javascripts/bootstrap.min.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+        $(document).ready(function() {
+          $("#wrapper").toggleClass("toggled");
+        });
+
+    </script>
 </head>
 <style> /* set the CSS */
 
@@ -84,12 +93,6 @@ div.tooltip {
             <li>
                 <a href="dashboard" id="showDashboard">Dashboard</a>
             </li>
-<!--            <li>-->
-<!--                <a href="recomendation" id="showRecommendation">Find your perfect listing</a>-->
-<!--            </li>-->
-<!--            <li>-->
-<!--                <a href="profit" >Profit Analysis</a>-->
-<!--            </li>-->
         </ul>
     </div>
     <!-- /#sidebar-wrapper -->
@@ -102,45 +105,41 @@ div.tooltip {
                     <div id="recommendation" >
                         <h1>Build your portfolio !!</h1>
 
-                        <div class="form-group">
-                            <label for="parm1">Please select the Company you want to </label>
-                            <select class="form-control" id="parm1">
-                                <option>Apple</option>
-                                <option>Amazon</option>
-                                <option>Expedia</option>
-                                <option>TripAdvisor</option>
-                                <option>Google</option>
-                                <option>Ebay</option>
-                                <option>FaceBook</option>
-                                <option>MicroSoft</option>
-                                <option>Walmart</option>
-                            </select>
-                            <br>
-<!--                            <select class="form-control" id="parm2">-->
-<!--                                <option>5</option>-->
-<!--                                <option>10</option>-->
-<!--                                <option>15</option>-->
-<!--                                <option>20</option>-->
-<!--                                <option>25</option>-->
-<!--                                <option>30</option>-->
-<!--                                <option>35</option>-->
-<!--                                <option>40</option>-->
-<!--                                <option>50</option>-->
+                        @helper.form(action=routes.HomeController.addPortfolioToDB()){
+                        @helper.CSRF.formField
+                        <p style="color: #2d2d2d; font-family:Arial; text-align: center; font-size: 12px">@flash.get("error")</p>
+                        @helper.inputText(portfolioData("PortfolioID"), '_label -> null, 'placeholder -> "username1...", '_showConstraints -> false)
+                        @helper.inputText(portfolioData("StockCode"), '_label -> null, 'placeholder -> "AAPL MSFT etc", '_showConstraints -> false)
+                        @helper.inputText(portfolioData("Quantity"), '_label -> null, 'placeholder -> "quantity", '_showConstraints -> false)
+
+                        @helper.inputText(portfolioData("Rule"), '_label -> null, 'placeholder -> "rule value", '_showConstraints -> false)
+                        <input type="submit" value="add to Portfolio"/>
+                        }
+
+
+<!--                        <form method="post" action="@routes.HomeController.addPortfolioToDB()">-->
+<!--                        <div class="form-group">-->
+<!--                            <label for="parm1">Please select the Company you want</label>-->
+<!--                            <select class="form-control" id="parm1">-->
+<!--                                <option>Apple</option>-->
+<!--                                <option>Amazon</option>-->
+<!--                                <option>Expedia</option>-->
+<!--                                <option>TripAdvisor</option>-->
+<!--                                <option>Google</option>-->
+<!--                                <option>Ebay</option>-->
+<!--                                <option>FaceBook</option>-->
+<!--                                <option>MicroSoft</option>-->
+<!--                                <option>Walmart</option>-->
 <!--                            </select>-->
-                            <br>
-                            <input type="range" value="0" max="10" id="rule" oninput="num.value = this.value">
-                            <output id="num" style="font-size:30px">0</output>
-                            <label for="rule">Rule Limit</label>
-                            <br>
-                            <button type="button" id="fetchRecommendation" class="btn btn-primary" onclick="Prediction()">
-                                Add To Portfolio
-                            </button>
+<!--                            <br>-->
+<!--                            <input type="range" value="0" max="10" id="rule" oninput="num.value = this.value">-->
+<!--                            <output id="num" style="font-size:30px">0</output>-->
+<!--                            <label for="rule">Rule Limit</label>-->
+<!--                            <br>-->
 
-<!--                            <button type="button" id="fetchRecommendation" class="btn btn-primary" onclick="Prediction()">-->
-<!--                                Edit Portfolio-->
-<!--                            </button>-->
-
-                        </div>
+<!--                            <input class="btn btn-primary" type="submit"></input>-->
+<!--                        </div>-->
+<!--                        </form>-->
                     </div>
 
                 </div>
@@ -152,25 +151,11 @@ div.tooltip {
 </div>
 
 </body>
-
-<!-- load the d3.js library -->
-<script type=
-                "text/javascript" src="http://d3js.org/d3.v3.min.js">
-</script>
+}
+}
 
 
-<script src="/assets/javascripts/jquery.js"></script>
-<script src="/assets/javascripts/recommendation.js"></script>
-<!-- Bootstrap Core JavaScript -->
-<script src="/assets/javascripts/bootstrap.min.js"></script>
 
-<!-- Menu Toggle Script -->
-<script>
-        $(document).ready(function() {
-          $("#wrapper").toggleClass("toggled");
-        });
-
-</script>
 
 
 

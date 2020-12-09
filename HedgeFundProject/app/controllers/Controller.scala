@@ -4,10 +4,16 @@ import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.util.Timeout
 import javax.inject._
 import models.login.LoginHandler
+import models.login.PortfolioHandler
 import models.DAO.UserTable
+import models.DAO.PortfolioTable
 import play.api.data.Forms._
 import play.api.data._
 import play.api.mvc._
+
+import play.api.data.format.Formats._
+import play.api.data.format.Formats.doubleFormat
+
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -23,6 +29,8 @@ case class LoginForm(username: String, password: String)
 
 // Case class to validate sign-up form
 case class SignUpForm(username: String, password: String, name: String, email: String)
+
+case class PortfolioForm(portfolioID: String, stockCode: String, quantity: Double, rule: Double)
 
 @Singleton
 class HomeController @Inject()(mailerClient: MailerClient)(system: ActorSystem,cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
@@ -41,6 +49,13 @@ class HomeController @Inject()(mailerClient: MailerClient)(system: ActorSystem,c
     "Name" -> nonEmptyText,
     "Email" -> email
   )(SignUpForm.apply)(SignUpForm.unapply))
+
+  val portfolioData = Form(mapping(
+    "PortfolioID" -> nonEmptyText,
+    "StockCode" -> nonEmptyText,
+    "Quantity" -> of[Double],
+    "Rule" -> of[Double]
+  )(PortfolioForm.apply)(PortfolioForm.unapply))
 
   def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index())
@@ -79,17 +94,30 @@ class HomeController @Inject()(mailerClient: MailerClient)(system: ActorSystem,c
   })
   }
 
+  def addPortfolioToDB(): Action[AnyContent] = Action.async { implicit request =>
+    portfolioData.bindFromRequest.fold(
+      formWithError => Future(BadRequest(views.html.portfolio.dashboard(formWithError))),
+      sgd => {
+        val handler = new PortfolioHandler() with PortfolioTable
+        (handler.addPortfolio(sgd.portfolioID,sgd.stockCode,100, sgd.rule.toDouble)).map(b => b match {
+          case true => Redirect(routes.HomeController.dashboard())
+          case false => Redirect(routes.HomeController.dashboard()).flashing("error" -> s"already have portfolio so go check ML")
+        })
+      })
+  }
+
   def action(): Action[AnyContent] = Action { implicit request =>
     Ok(views.html.Action.action())
   }
 
   def dashboard(): Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.portfolio.dashboard())
+    Ok(views.html.portfolio.dashboard(portfolioData))
   }
 
 //  def test(): Action[AnyContent] = Action { implicit request =>
 //    Ok(views.html.test())
 //  }
+
 
 //  def emailSender(): Action[AnyContent] = Action { implicit request =>
 //    Ok(sendEmail)
@@ -117,4 +145,5 @@ class HomeController @Inject()(mailerClient: MailerClient)(system: ActorSystem,c
     mailerClient.send(email)
     Ok(s"Email  sent!")
   }
+
 }
