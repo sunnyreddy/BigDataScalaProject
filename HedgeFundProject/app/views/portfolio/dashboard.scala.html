@@ -1,5 +1,5 @@
-@(portfolioData: Form[PortfolioForm])(implicit request: MessagesRequestHeader, flash: Flash)
-
+@(portfolioData: Form[PortfolioForm], amount:Double)(implicit request: MessagesRequestHeader, flash: Flash)
+@()
 @main("dashboard") {
 @defining(play.core.PlayVersion.current) { version =>
 <head>
@@ -104,14 +104,15 @@ div.tooltip {
                 <div class="col-lg-12">
                     <div id="recommendation" >
                         <h1>Build your portfolio !!</h1>
+                        <h4>Amount Remaining: @amount</h4>
 
                         @helper.form(action=routes.HomeController.addPortfolioToDB()){
                         @helper.CSRF.formField
                         <p style="color: #2d2d2d; font-family:Arial; text-align: center; font-size: 12px">@flash.get("error")</p>
-                        @helper.inputText(portfolioData("PortfolioID"), '_label -> null, 'placeholder -> "username1...", '_showConstraints -> false)
+<!--                        @helper.inputText(portfolioData("PortfolioID"), '_label -> null, 'placeholder -> "username1...", '_showConstraints -> false)-->
                         @helper.inputText(portfolioData("StockCode"), '_label -> null, 'placeholder -> "AAPL MSFT etc", '_showConstraints -> false)
                         @helper.inputText(portfolioData("Quantity"), '_label -> null, 'placeholder -> "quantity", '_showConstraints -> false)
-
+                        <button class="btn btn-primary">Get Rules</button>
                         @helper.inputText(portfolioData("Rule"), '_label -> null, 'placeholder -> "rule value", '_showConstraints -> false)
                         <input type="submit" value="add to Portfolio"/>
                         }
