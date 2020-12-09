@@ -18,4 +18,10 @@ class PortfolioHandler {
       }
     })
   }
+  def getRule(portfolioID: String): Future[Any] = {
+    filter_portfolioID(portfolioID).map(s => s.headOption match {
+      case Some(p) => p.rule
+      case None => "Not Exist"
+    })
+  }
 }

@@ -25,7 +25,17 @@ class LoginHandler {
     })
     }
 
-  def getPortfolioId(username:String): Unit = {
-    // to do
+  def getPortfolioId(username:String): Future[String] = {
+    filter_username(username).map(s => s.headOption match {
+      case Some(u) => u.portfolioID
+      case None => "Not Exists"
+    })
   }
+  def getAvailableFund(username:String): Future[Any] = {
+    filter_username(username).map(s => s.headOption match {
+      case Some(u) => u.availableFund
+      case None => "Not Exists"
+    })
+  }
+
 }
