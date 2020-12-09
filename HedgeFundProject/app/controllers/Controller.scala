@@ -9,6 +9,7 @@ import models.DAO.PortfolioTable
 import play.api.data.Forms._
 import play.api.data._
 import play.api.mvc._
+import MLPackage.MajorIndexETF
 
 import play.api.data.format.Formats._
 import play.api.data.format.Formats.doubleFormat
@@ -39,6 +40,7 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
   var user = ""
   var userEmail = ""
   var amount = 1000
+  var stockCheck = ""
 
   val loginData = Form(mapping(
     "Username" -> nonEmptyText,
@@ -75,7 +77,7 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
          user = ld.username
          val handler = new LoginHandler() with UserTable
          (handler.validateUser(ld.username, ld.password)).map(b => b match {
-           case true => Redirect(routes.HomeController.dashboard())
+           case true => Redirect(routes.HomeController.recommendation())
            case false => Redirect(routes.HomeController.login()).flashing("error" -> s"**Username or password is incorrect")
       })
       })
@@ -100,8 +102,9 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
 
   def addPortfolioToDB(): Action[AnyContent] = Action.async { implicit request =>
     portfolioData.bindFromRequest.fold(
-      formWithError => Future(BadRequest(views.html.portfolio.dashboard(formWithError,0))),
+      formWithError => Future(BadRequest(views.html.portfolio.dashboard(formWithError,0,"0"))),
       sgd => {
+        stockCheck = sgd.stockCode
         val handler = new PortfolioHandler() with PortfolioTable
         (handler.addPortfolio(user + "1",sgd.stockCode,100, sgd.rule.toDouble)).map(b => b match {
           case true => Redirect(routes.HomeController.dashboard())
@@ -115,7 +118,12 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
   }
 
   def dashboard(): Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.portfolio.dashboard(portfolioData,amount))
+    Ok(views.html.portfolio.dashboard(portfolioData,amount,"0"))
+  }
+
+  def getRule(): Action[AnyContent] = Action { implicit request =>
+      val rule = MajorIndexETF.getRule(stockCheck)
+      Ok(views.html.portfolio.dashboard(portfolioData,amount,rule.toString))
   }
 
 //  def test(): Action[AnyContent] = Action { implicit request =>
@@ -134,7 +142,9 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
     Ok(s"Email  sent!")
   }
 
-
+  def recommendation(): Action[AnyContent] = Action { implicit request =>
+    Ok(views.html.portfolio.recommendation())
+  }
 
 
 }

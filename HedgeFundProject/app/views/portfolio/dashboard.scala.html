@@ -1,4 +1,4 @@
-@(portfolioData: Form[PortfolioForm], amount:Double)(implicit request: MessagesRequestHeader, flash: Flash)
+@(portfolioData: Form[PortfolioForm], amount:Double, rule:String)(implicit request: MessagesRequestHeader, flash: Flash)
 @()
 @main("dashboard") {
 @defining(play.core.PlayVersion.current) { version =>
@@ -91,6 +91,7 @@ div.tooltip {
                 </a>
             </li>
             <li>
+                <a href="recommendation">Get Recommendation</a>
                 <a href="dashboard" id="showDashboard">Dashboard</a>
             </li>
         </ul>
@@ -112,12 +113,16 @@ div.tooltip {
 <!--                        @helper.inputText(portfolioData("PortfolioID"), '_label -> null, 'placeholder -> "username1...", '_showConstraints -> false)-->
                         @helper.inputText(portfolioData("StockCode"), '_label -> null, 'placeholder -> "AAPL MSFT etc", '_showConstraints -> false)
                         @helper.inputText(portfolioData("Quantity"), '_label -> null, 'placeholder -> "quantity", '_showConstraints -> false)
-                        <button class="btn btn-primary">Get Rules</button>
+
                         @helper.inputText(portfolioData("Rule"), '_label -> null, 'placeholder -> "rule value", '_showConstraints -> false)
                         <input type="submit" value="add to Portfolio"/>
                         }
 
-
+                        <h1>@rule</h1>
+<!--                        <form action="@routes.HomeController.getRule()">-->
+<!--                            <input type="submit" value="Get Rules" />-->
+<!--                        </form>-->
+<!--                        <button class="btn btn-primary" onclick="@routes.HomeController.getRule()">Get Rules</button>-->
 <!--                        <form method="post" action="@routes.HomeController.addPortfolioToDB()">-->
 <!--                        <div class="form-group">-->
 <!--                            <label for="parm1">Please select the Company you want</label>-->
