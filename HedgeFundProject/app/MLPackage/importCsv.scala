@@ -16,6 +16,7 @@ object importCsv extends App{
   lazy val spark = SparkSession.builder().appName("Hedge").master("local[*]").getOrCreate();
   import spark.implicits._
   def getStockDataframe(sparkSession: SparkSession, stockID: String): DataFrame = {
+    //&outputsize=full
     val uri: String = s"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${stockID}&apikey=${API_KEY}&datatype=csv"
     val res = scala.io.Source.fromURL(uri).mkString.stripMargin.lines.toList
     val csvData: Dataset[String] = spark.sparkContext.parallelize(res).toDS()
