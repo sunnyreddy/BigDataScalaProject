@@ -1,6 +1,5 @@
 package controllers
 
-import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.util.Timeout
 import javax.inject._
 import models.login.LoginHandler
@@ -14,7 +13,7 @@ import play.api.mvc._
 import play.api.data.format.Formats._
 import play.api.data.format.Formats.doubleFormat
 
-
+import play.api.db._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
@@ -33,9 +32,8 @@ case class SignUpForm(username: String, password: String, name: String, email: S
 case class PortfolioForm(portfolioID: String, stockCode: String, quantity: Double, rule: Double)
 
 @Singleton
-class HomeController @Inject()(mailerClient: MailerClient)(system: ActorSystem,cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
-  //actors
-//  val bossActor = ActorSystem().actorOf(Props[BossActor])
+class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
+
   implicit val timeout: Timeout = 5 minutes
 
   val loginData = Form(mapping(
@@ -118,32 +116,18 @@ class HomeController @Inject()(mailerClient: MailerClient)(system: ActorSystem,c
 //    Ok(views.html.test())
 //  }
 
-
-//  def emailSender(): Action[AnyContent] = Action { implicit request =>
-//    Ok(sendEmail)
-//  }
-//
-//  def sendEmail = {
-//    val email = Email(
-//      "Simple email",
-//      "Mister FROM <scalatest2020@hotmail.com>",
-//      Seq("Miss TO <yuan.ya@northeastern.com>"),
-//      bodyText = Some("A text message")
-//    )
-//    mailerClient.send(email)
-//  }
   def emailSender = Action {
-    //  val mailer = new SMTPMailer(SMTPConfiguration("typesafe.org", 1234))
-    // val id = mailer.send(Email("Simple email", "Mister FROM <abhinaykumar499@gmail.com>"))
-
     val emailfrom="2020hedgetest@gmail.com"
     val emailto="2020hedgetest@gmail.com"
     val subject ="Simple Email"
     val bodytext="A text message";
 
-    val email = Email("Simple email", ""+emailfrom+"", Seq(""+emailto+""), bodyText = Some("A text message"))
+    val email = Email(subject, ""+emailfrom+"", Seq(""+emailto+""), bodyText = Some(bodytext))
     mailerClient.send(email)
     Ok(s"Email  sent!")
   }
+
+
+
 
 }

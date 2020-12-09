@@ -1,13 +1,14 @@
 package models.DAO
 
 import scala.concurrent.Future
-import play.api.libs.json._
+import scala.collection.mutable
 
 case class User(username: String, password: String, name: String, email: String, portfolioID: String, availableFund: BigDecimal)
 
 
-trait UserTable {
 
+trait UserTable{
+//  this: DbConfiguration =>
   import DbConfiguration.config.profile.api._
 
   class Users(tag: Tag) extends Table[User](tag, "USERS") {
@@ -20,7 +21,7 @@ trait UserTable {
     def * = (username, password, name, email, portfolioID, availableFund) <> (User.tupled, User.unapply)
   }
 
-  val allUsers = TableQuery[Users]
+  var allUsers = TableQuery[Users]
 
   /* Function to check if the username persists in the database or not*/
   def filter_username(username: String): Future[Seq[User]] = {
@@ -41,5 +42,5 @@ trait UserTable {
   def show(): Future[Seq[User]] = DbConfiguration.config.db.run {
     allUsers.result
   }
-
 }
+

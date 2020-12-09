@@ -6,7 +6,7 @@ import org.apache.spark.ml.regression.{DecisionTreeRegressionModel, DecisionTree
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 object OtherModels {
-
+  //for 5 minute interval data
   def linearRegression(input: DataFrame): (LinearRegressionModel, Double) = {
     val featureData = input.select("hign","low","adjusted_close","volumn")
     val assembler1 = new VectorAssembler().

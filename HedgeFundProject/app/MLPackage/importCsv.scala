@@ -19,12 +19,4 @@ object importCsv extends App{
     DataWithName
   }
 
-  def getTrainingData(Data:DataFrame): DataFrame= {
-    ???
-  }
-  def getTestingData(Data:DataFrame): DataFrame= {
-    ???
-  }
-
-
 }
