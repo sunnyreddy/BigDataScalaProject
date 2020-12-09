@@ -3,10 +3,6 @@ input[type=text], select {
   padding: 12px 20px;
   margin: auto;
   margin-bottom: 20px;
-  display: list-item;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
 }
 
 input[type=password], select {
@@ -14,10 +10,6 @@ input[type=password], select {
   padding: 12px 20px;
   margin: auto;
   margin-bottom: 20px;
-  display: list-item;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
 }
 
 input[type=email], select {
@@ -25,14 +17,10 @@ input[type=email], select {
   padding: 12px 20px;
   margin: auto;
   margin-bottom: 20px;
-  display: list-item;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
 }
 
 input[type=submit] {
-  width: 30%;
+  width: 100%;
   background-color: rgb(30, 164, 216);
   color: white;
   padding: 14px 20px;
@@ -74,10 +62,8 @@ body{
 
 #right-signup {
     position: fixed;
-    bottom: 10%;
-    right: 10%;
+    bottom: 40%;
+    right: 40%;
 }
 
-/*#button1 , #button2 {
-display:inline-block;
-}*/
+

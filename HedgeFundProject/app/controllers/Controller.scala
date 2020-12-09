@@ -113,10 +113,6 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
       })
   }
 
-  def action(): Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.Action.action())
-  }
-
   def dashboard(): Action[AnyContent] = Action { implicit request =>
     Ok(views.html.portfolio.dashboard(portfolioData,amount,"0"))
   }

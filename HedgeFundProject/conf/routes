@@ -11,7 +11,6 @@ GET     /signup                     controllers.HomeController.signup
 +nocsrf
 POST    /validateLogin              controllers.HomeController.validateLogin
 POST    /validateSignUp             controllers.HomeController.validateSignUp
-GET     /action                     controllers.HomeController.action
 GET     /dashboard                  controllers.HomeController.dashboard
 #GET  /send_email                   controllers.HomeController.emailSender
 POST    /addPortfolio               controllers.HomeController.addPortfolioToDB

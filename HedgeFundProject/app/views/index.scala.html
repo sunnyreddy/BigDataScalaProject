@@ -1,8 +1,22 @@
 @()(implicit flash: Flash)
 
 @main("Welcome") {
+    <head>
+        <style>
+            input[type=submit] {
+              width: 30%;
+              background-color: rgb(30, 164, 216);
+              color: white;
+              padding: 14px 20px;
+              margin: 8px 0;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+            }
+        </style>
+    </head>
     <body class="landing-page" style="margin: 0; padding: 0;">
-        <h1 style="color: red; font-family:Arial; text-align: center">Husky Hedge Fund</h1>
+        <h1 style="color: red; font-family:Arial; text-align: center">HEDGE FUND</h1>
         <div>
             <form action="/login" style="text-align:center">
                 <input type="submit" value="Login">
@@ -10,9 +24,10 @@
         </div>
 
         <div>
-            <form action="/signup">
+            <form style="padding-left:700px" action="/signup">
                 <input type="submit" value="Sign-Up">
             </form>
         </div>
+        <h3 style="color:red; text-align:center">Not a member Sign Up</h3>
     </body>
 }
