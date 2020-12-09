@@ -32,4 +32,18 @@ class LoginHandler {
       case None => "medasaikanth@gmail.com"
     })
   }
+
+  def getPortfolioId(username:String): Future[String] = {
+    filter_username(username).map(s => s.headOption match {
+      case Some(u) => u.portfolioID
+      case None => "Not Exists"
+    })
+  }
+  def getAvailableFund(username:String): Future[Any] = {
+    filter_username(username).map(s => s.headOption match {
+      case Some(u) => u.availableFund
+      case None => "Not Exists"
+    })
+  }
+
 }
