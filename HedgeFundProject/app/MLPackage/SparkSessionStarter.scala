@@ -7,7 +7,8 @@ object SparkSessionStarter extends App{
   //start spark session
   val spark = SparkSession.builder
     .master("local[*]")
-    .appName("Spark import")
+    .appName("Hedge")
     .getOrCreate()
+  import spark.implicits._
 
 }

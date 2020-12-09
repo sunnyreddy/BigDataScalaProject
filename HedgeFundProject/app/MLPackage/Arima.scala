@@ -10,12 +10,8 @@ import org.apache.spark.sql.types.DoubleType
 
 //reference: http://www.technippet.com/2017/01/stock-price-prediction-time-series.html
 object Arima {
-  def ArimaRMSE(Data:DataFrame): Double = {
-      ???
-  }
   def pridictPice(Data:DataFrame): List[Double]= {
     val featureData = Data.select("timestamp", "Name", "adjusted_close")
-
     val formattedDF = featureData
       .withColumn("timestamp", to_timestamp(featureData("timestamp")))
       .withColumn("price", featureData("adjusted_close").cast(DoubleType))
@@ -36,7 +32,7 @@ object Arima {
       val noOfDays = 30
       val newVec = new org.apache.spark.mllib.linalg.DenseVector(vector.toArray.map(x => if (x.equals(Double.NaN)) 0 else x))
       //      val newVecSize = newVec.size
-      val arimaModel = fitModel(1, 0, 0, newVec)
+      val arimaModel = fitModel(4, 0, 1, newVec)
       val forecasted = arimaModel.forecast(newVec, noOfDays)
       //      val forecastedVecSize = forecasted.size
       new org.apache.spark.mllib.linalg.DenseVector(forecasted.toArray.slice(forecasted.size - (noOfDays + 1), forecasted.size - 1))

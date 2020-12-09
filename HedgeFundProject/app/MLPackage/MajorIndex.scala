@@ -16,8 +16,10 @@ object MajorIndexETF {
     recommendPercentDirect(NasdaqTech)
   }
   def getRule(stockID:String) ={
-    if((getSP500ETF> 2)  && (recommendPercentDirect(stockID)> 2)) {
-      getSP500ETF * 5 / recommendPercentDirect(stockID)
+    val hedgeObject = getSP500ETF
+    val target = recommendPercentDirect(stockID)
+    if((hedgeObject> 2)  && (target> 0)) {
+      hedgeObject * 5 / target
     }
     else "Not Recommend"
   }
@@ -35,8 +37,8 @@ object MajorIndexETF {
     false
   }
   def highest(inputs:List[Double],price: Double):Double = {
-    var globalHigh = price
     var i  = 0
+    var globalHigh = inputs.lift(i).get
     while (i < inputs.length) {
       if(inputs.lift(i).get > globalHigh) {
         globalHigh = inputs.lift(i).get
@@ -56,6 +58,4 @@ object MajorIndexETF {
     val highestPrice = highest(predictList, price)
     recommendPercent(highestPrice, price)
   }
-
-
 }
