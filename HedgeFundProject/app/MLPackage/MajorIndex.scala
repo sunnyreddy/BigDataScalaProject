@@ -16,7 +16,7 @@ object MajorIndexETF {
     recommendPercentDirect(NasdaqTech)
   }
   def getRule(stockID:String) ={
-    if((getSP500ETF> 2)  && (recommendPercentDirect(stockID)> 2)) {
+    if((getSP500ETF> 2)  && (recommendPercentDirect(stockID)> 0)) {
       getSP500ETF * 5 / recommendPercentDirect(stockID)
     }
     else "Not Recommend"
