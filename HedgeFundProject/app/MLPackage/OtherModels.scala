@@ -60,8 +60,5 @@ object OtherModels {
     val rf_rootMeanSquaredError = evaluator.evaluate(predictData)
     (RandomForestRegressorModel, rf_rootMeanSquaredError)
   }
-  def getAverageResult(StockID:String) : List[Double] ={
-    ???
-  }
 
 }

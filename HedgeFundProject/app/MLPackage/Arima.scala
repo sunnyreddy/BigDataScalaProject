@@ -10,9 +10,6 @@ import org.apache.spark.sql.types.DoubleType
 
 //reference: http://www.technippet.com/2017/01/stock-price-prediction-time-series.html
 object Arima {
-  def ArimaRMSE(Data:DataFrame): Double = {
-      ???
-  }
   def pridictPice(Data:DataFrame): List[Double]= {
     val featureData = Data.select("timestamp", "Name", "adjusted_close")
 

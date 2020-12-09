@@ -56,6 +56,4 @@ object MajorIndexETF {
     val highestPrice = highest(predictList, price)
     recommendPercent(highestPrice, price)
   }
-
-
 }
