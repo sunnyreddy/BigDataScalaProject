@@ -38,7 +38,7 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
 
   var user = ""
   var userEmail = ""
-  var amount = 1000
+  var amount = 0
   var stockCheck = ""
 
   val loginData = Form(mapping(
@@ -76,6 +76,7 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
          user = ld.username
          val handler = new LoginHandler() with UserTable
          userEmail = Await.result(handler.getUserEmail(user), 1.second)
+         amount = Await.result(handler.getAvailableFund(ld.username), 1.second).toInt
          (handler.validateUser(ld.username, ld.password)).map(b => b match {
            case true => Redirect(routes.HomeController.recommendation())
            case false => Redirect(routes.HomeController.login()).flashing("error" -> s"**Username or password is incorrect")
@@ -105,7 +106,7 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
       sgd => {
         stockCheck = sgd.stockCode
         val handler = new PortfolioHandler() with PortfolioTable
-        (handler.addPortfolio(user + "1",sgd.stockCode,100, sgd.rule.toDouble)).map(b => b match {
+        (handler.addPortfolio(user + "1",sgd.stockCode,sgd.quantity.toDouble, sgd.rule.toDouble)).map(b => b match {
           case true => Redirect(routes.HomeController.dashboard())
           case false => Redirect(routes.HomeController.dashboard()).flashing("error" -> s"already have portfolio so go check ML")
         })

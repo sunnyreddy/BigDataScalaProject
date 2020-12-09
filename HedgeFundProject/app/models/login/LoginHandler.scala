@@ -39,10 +39,10 @@ class LoginHandler {
       case None => "Not Exists"
     })
   }
-  def getAvailableFund(username:String): Future[Any] = {
+  def getAvailableFund(username:String): Future[BigDecimal] = {
     filter_username(username).map(s => s.headOption match {
       case Some(u) => u.availableFund
-      case None => "Not Exists"
+      case None => 0
     })
   }
 
