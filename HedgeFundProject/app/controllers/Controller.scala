@@ -10,17 +10,16 @@ import play.api.data.Forms._
 import play.api.data._
 import play.api.mvc._
 import MLPackage.MajorIndexETF
-
 import play.api.data.format.Formats._
 import play.api.data.format.Formats.doubleFormat
-
 import play.api.db._
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.concurrent.duration.DurationInt
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration.DurationInt
 import play.api.libs.mailer._
 import java.io.File
+
 import org.apache.commons.mail.EmailAttachment
 import javax.inject.Inject
 
@@ -76,6 +75,7 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
       ld => {
          user = ld.username
          val handler = new LoginHandler() with UserTable
+         userEmail = Await.result(handler.getUserEmail(user), 1.second)
          (handler.validateUser(ld.username, ld.password)).map(b => b match {
            case true => Redirect(routes.HomeController.recommendation())
            case false => Redirect(routes.HomeController.login()).flashing("error" -> s"**Username or password is incorrect")
@@ -91,7 +91,6 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
     signupData.bindFromRequest.fold(
       formWithError => Future(BadRequest(views.html.credentials.signup(formWithError))),
       sgd => {
-        userEmail = sgd.email
         val handler = new LoginHandler() with UserTable
         (handler.addUser(sgd.username, sgd.password, sgd.name, sgd.email,sgd.username+"1",1000.0)).map(b => b match {
           case true => Redirect(routes.HomeController.login())
@@ -121,8 +120,12 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
     Ok(views.html.portfolio.dashboard(portfolioData,amount,"0"))
   }
 
-  def getRule(): Action[AnyContent] = Action { implicit request =>
-      val rule = MajorIndexETF.getRule(stockCheck)
+  def getRule(stockChec : String): Action[AnyContent] = Action { implicit request =>
+
+      val rule = MajorIndexETF.getRule(stockChec)
+      if(rule != "Not Recommend")
+        emailSender()
+
       Ok(views.html.portfolio.dashboard(portfolioData,amount,rule.toString))
   }
 
@@ -130,13 +133,13 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
 //    Ok(views.html.test())
 //  }
 
-  def emailSender = Action {
+  def emailSender():Unit = {
     val emailfrom="2020hedgetest@gmail.com"
-    val emailto="2020hedgetest@gmail.com"
+    val emailto = userEmail
     val subject ="Simple Email"
     val bodytext="A text message";
 
-    val email = Email(subject, ""+emailfrom+"", Seq(""+userEmail+""), bodyText = Some(bodytext))
+    val email = Email(subject, ""+emailfrom+"", Seq(""+emailto+""), bodyText = Some(bodytext))
 
     mailerClient.send(email)
     Ok(s"Email  sent!")

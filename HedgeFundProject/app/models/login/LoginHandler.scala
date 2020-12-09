@@ -25,7 +25,11 @@ class LoginHandler {
     })
     }
 
-  def getPortfolioId(username:String): Unit = {
+  def getUserEmail(username:String): Future[String] = {
     // to do
+    filter_username(username).map(s => s.headOption match {
+      case Some(u) => u.email
+      case None => "medasaikanth@gmail.com"
+    })
   }
 }
