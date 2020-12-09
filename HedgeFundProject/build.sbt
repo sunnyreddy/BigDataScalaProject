@@ -4,7 +4,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
     name := """Hedge Fund""",
     organization := "com.example",
     version := "1.0-SNAPSHOT",
-    scalaVersion := "2.11.8",
+    scalaVersion := "2.11.12",
     libraryDependencies++=Seq(
   //spark
       "org.apache.spark" %% "spark-core" % SparkVersion,
@@ -35,6 +35,10 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
       "com.typesafe.play" %% "play-mailer" % "7.0.1",
       "com.typesafe.play" %% "play-mailer-guice" % "7.0.1",
 //      "com.typesafe.play.plugins" %% "play-plugins-mailer" % "2.3.1"
+      //jackson fixtest
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.0",
+      "com.fasterxml.jackson.core" % "jackson-databind" % "2.12.0",
+      "com.fasterxml.jackson.core" % "jackson-core" % "2.12.0"
       )
     )
 

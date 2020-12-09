@@ -2,18 +2,11 @@ package MLPackage
 
 import MLPackage.Arima.pridictPice
 import MLPackage.SparkSessionStarter.spark
-import getData.importCsv.{API_KEY, getStockDataframe}
-import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
-import org.apache.spark.sql.functions.lit
+import MLPackage.importCsv.{ getStockDataframe}
 
-import scala.math.Fractional.Implicits.infixFractionalOps
-import scala.math.Numeric.Implicits.infixNumericOps
-import scala.math.Ordered.orderingToOrdered
 
 object MajorIndexETF {
   import spark.implicits._
-  //  var stockID: String = "IBM"
-  //val API_KEY = "3V0DC5QKBMDYUPNX"
   def getSP500ETF() = {
     val SP500ETF: String = "SPY"
     recommendPercentDirect(SP500ETF)
