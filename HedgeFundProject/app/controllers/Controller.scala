@@ -29,12 +29,16 @@ case class LoginForm(username: String, password: String)
 // Case class to validate sign-up form
 case class SignUpForm(username: String, password: String, name: String, email: String)
 
-case class PortfolioForm(portfolioID: String, stockCode: String, quantity: Double, rule: Double)
+case class PortfolioForm(stockCode: String, quantity: Double, rule: Double)
 
 @Singleton
 class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
 
   implicit val timeout: Timeout = 5 minutes
+
+  var user = ""
+  var userEmail = ""
+  var amount = 1000
 
   val loginData = Form(mapping(
     "Username" -> nonEmptyText,
@@ -49,7 +53,7 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
   )(SignUpForm.apply)(SignUpForm.unapply))
 
   val portfolioData = Form(mapping(
-    "PortfolioID" -> nonEmptyText,
+//    "PortfolioID" -> nonEmptyText,
     "StockCode" -> nonEmptyText,
     "Quantity" -> of[Double],
     "Rule" -> of[Double]
@@ -68,6 +72,7 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
     loginData.bindFromRequest.fold(
       formWithError => Future(BadRequest(views.html.credentials.login(formWithError))),
       ld => {
+         user = ld.username
          val handler = new LoginHandler() with UserTable
          (handler.validateUser(ld.username, ld.password)).map(b => b match {
            case true => Redirect(routes.HomeController.dashboard())
@@ -84,8 +89,9 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
     signupData.bindFromRequest.fold(
       formWithError => Future(BadRequest(views.html.credentials.signup(formWithError))),
       sgd => {
+        userEmail = sgd.email
         val handler = new LoginHandler() with UserTable
-        (handler.addUser(sgd.username, sgd.password, sgd.name, sgd.email,sgd.username+"1",100000.0)).map(b => b match {
+        (handler.addUser(sgd.username, sgd.password, sgd.name, sgd.email,sgd.username+"1",1000.0)).map(b => b match {
           case true => Redirect(routes.HomeController.login())
           case false => Redirect(routes.HomeController.signup()).flashing("error" -> s"**Username already exists")
       })
@@ -94,10 +100,10 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
 
   def addPortfolioToDB(): Action[AnyContent] = Action.async { implicit request =>
     portfolioData.bindFromRequest.fold(
-      formWithError => Future(BadRequest(views.html.portfolio.dashboard(formWithError))),
+      formWithError => Future(BadRequest(views.html.portfolio.dashboard(formWithError,0))),
       sgd => {
         val handler = new PortfolioHandler() with PortfolioTable
-        (handler.addPortfolio(sgd.portfolioID,sgd.stockCode,100, sgd.rule.toDouble)).map(b => b match {
+        (handler.addPortfolio(user + "1",sgd.stockCode,100, sgd.rule.toDouble)).map(b => b match {
           case true => Redirect(routes.HomeController.dashboard())
           case false => Redirect(routes.HomeController.dashboard()).flashing("error" -> s"already have portfolio so go check ML")
         })
@@ -109,7 +115,7 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
   }
 
   def dashboard(): Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.portfolio.dashboard(portfolioData))
+    Ok(views.html.portfolio.dashboard(portfolioData,amount))
   }
 
 //  def test(): Action[AnyContent] = Action { implicit request =>
@@ -122,7 +128,8 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
     val subject ="Simple Email"
     val bodytext="A text message";
 
-    val email = Email(subject, ""+emailfrom+"", Seq(""+emailto+""), bodyText = Some(bodytext))
+    val email = Email(subject, ""+emailfrom+"", Seq(""+userEmail+""), bodyText = Some(bodytext))
+
     mailerClient.send(email)
     Ok(s"Email  sent!")
   }

@@ -24,4 +24,8 @@ class LoginHandler {
       case None => false
     })
     }
+
+  def getPortfolioId(username:String): Unit = {
+    // to do
+  }
 }
