@@ -30,6 +30,12 @@ trait PortfolioTable {
       DbConfiguration.config.db.run(portfolios += row)
     }
 
+    def delete_row(portfolio: Portfolio): Future[Int] = {
+      val query = portfolios.filter(_.portfolioID === portfolio.portfolioID)
+      val action = query.delete
+      DbConfiguration.config.db.run(action)
+    }
+
     /*Function to receive all rows with specific PortfolioID and stock code in Portfolio table*/
     def retriveByID(portfolioID: String, stockCode: String): Future[Seq[Portfolio]] = {
       DbConfiguration.config.db.run(portfolios.filter(x =>(x.portfolioID === portfolioID &&x.stockCode === stockCode)).result)

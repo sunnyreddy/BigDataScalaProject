@@ -1,5 +1,6 @@
-@()(implicit flash: Flash)
-@main("recommendation") {
+@(portfolioData: Form[PortfolioForm],stockCode:String, quantity:String, rule:String)(implicit request: MessagesRequestHeader, flash: Flash)
+@()
+@main("addView Portfolio") {
 @defining(play.core.PlayVersion.current) { version =>
 <head>
 
@@ -9,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>recommendation</title>
+    <title></title>
 
     <!-- Bootstrap Core CSS -->
     <link href="/assets/stylesheets/bootstrap.css" rel="stylesheet">
@@ -27,9 +28,8 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <!-- load the d3.js library -->
-<!--    <script type=-->
-<!--                    "text/javascript" src="http://d3js.org/d3.v3.min.js">-->
-<!--    </script>-->
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js">
+    </script>
 
 
     <script src="/assets/javascripts/jquery.js"></script>
@@ -42,7 +42,6 @@
         $(document).ready(function() {
           $("#wrapper").toggleClass("toggled");
         });
-
     </script>
 </head>
 <style> /* set the CSS */
@@ -80,7 +79,6 @@ div.tooltip {
 </style>
 <body>
 <div id="wrapper">
-
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
@@ -99,34 +97,41 @@ div.tooltip {
     </div>
     <!-- /#sidebar-wrapper -->
 
-    <!-- Page Content -->
     <div id="page-content-wrapper">
         <div class="container-fluid">
             <div class="row" id="graphs">
                 <div class="col-lg-12">
                     <div id="recommendation" >
-                        <h1>Get Recommendation !!</h1>
-                        <form action="/getRule">
-                            <select name="stockCheck">
-                                <option value="AAPL">APPLE</option>
-                                <option value="MSFT">Microsoft</option>
-                                <option value="IBM">IBM</option>
-                                <option value="TSLA">Tesla</option>
-                            </select>
-                            <input type="submit" value="Get Rules" />
+                        <h1>View and Edit you portfolio & Rule !!</h1>
+                        <h1>@rule</h1>
+                        <form method="post" action="@routes.HomeController.editPortfolioToDB()">
+                            @helper.CSRF.formField
+                        <div class="form-group">
+                            <label for="stockC">Stock Code</label>
+                            <input id="stockC" name="stockC" type="text" value="@stockCode">
+
+                            <br>
+                            <label for="quantity">Quantity</label>
+                            <input type="text" name="quantity" id="quantity" value="@quantity">
+
+                            <br>
+                            <label for="rule">Rule Value</label>
+                            <input type="text" name="rule" id="rule" value="@rule">
+
+                            <br>
+                            <input class="btn btn-primary" value="Update Portfolio" type="submit"></input>
+                        </div>
                         </form>
                     </div>
 
                 </div>
             </div>
             <!-- /#page-content-wrapper -->
+
         </div>
     </div>
+    </div>
 </div>
-
 </body>
-
-
 }
 }
-

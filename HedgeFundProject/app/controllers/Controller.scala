@@ -4,8 +4,7 @@ import akka.util.Timeout
 import javax.inject._
 import models.login.LoginHandler
 import models.login.PortfolioHandler
-import models.DAO.UserTable
-import models.DAO.PortfolioTable
+import models.DAO.{Portfolio, PortfolioTable, UserTable}
 import play.api.data.Forms._
 import play.api.data._
 import play.api.mvc._
@@ -144,6 +143,30 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
 
   def recommendation(): Action[AnyContent] = Action { implicit request =>
     Ok(views.html.portfolio.recommendation())
+  }
+
+  def viewandeditPortfolio(): Action[AnyContent] = Action {implicit request =>
+    val handler = new PortfolioHandler() with PortfolioTable
+    val currPortfolio: Portfolio = Await.result(handler.getPortfolio(user+"1"), 1.second)
+    Ok(views.html.portfolio.viewandedit(portfolioData,currPortfolio.stockCode,currPortfolio.quantity.toString,currPortfolio.rule.toString))
+  }
+
+  def editPortfolioToDB(): Action[AnyContent] = Action.async { implicit request =>
+      val handler = new PortfolioHandler() with PortfolioTable
+      val p:Portfolio = Await.result(handler.getPortfolio(user+"1"), 1.second)
+      (handler.deletePortfolio(p.portfolioID,p.stockCode,p.quantity.toDouble, p.rule.toDouble)).map(b => b match {
+        case true => {
+          val postVals = request.body.asFormUrlEncoded
+          postVals.map { args =>
+            val stockC = args("stockC").head
+            val quantity = args("quantity").head
+            val rule = args("rule").head
+            handler.addPortfolio(p.portfolioID, stockC, quantity.toDouble, rule.toDouble)
+          }
+          Redirect(routes.HomeController.dashboard())
+        }
+        case false => Redirect(routes.HomeController.dashboard()).flashing("error" -> s"already have portfolio so go check ML")
+      })
   }
 
 
