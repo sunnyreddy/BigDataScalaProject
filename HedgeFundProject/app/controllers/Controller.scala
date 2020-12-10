@@ -119,9 +119,8 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
   def getRule(stockChec : String): Action[AnyContent] = Action { implicit request =>
 
       val rule = MajorIndexETF.getRule(stockChec)
-      if(rule != "Not Recommend")
-        emailSender()
-
+      //if(rule != "Not Recommend")
+        emailSender("Stock: "+stockChec+"\nRule: "+rule.toString)
       Ok(views.html.portfolio.dashboard(portfolioData,amount,rule.toString))
   }
 
@@ -129,14 +128,11 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
 //    Ok(views.html.test())
 //  }
 
-  def emailSender():Unit = {
+  def emailSender(input:String):Unit = {
     val emailfrom="2020hedgetest@gmail.com"
     val emailto = userEmail
-    val subject ="Simple Email"
-    val bodytext="A text message";
-
-    val email = Email(subject, ""+emailfrom+"", Seq(""+emailto+""), bodyText = Some(bodytext))
-
+    val subject ="Recommendation"
+    val email = Email(subject, ""+emailfrom+"", Seq(""+emailto+""), bodyText = Some(input))
     mailerClient.send(email)
     Ok(s"Email  sent!")
   }
