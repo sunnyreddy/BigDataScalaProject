@@ -161,7 +161,13 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
             val stockC = args("stockC").head
             val quantity = args("quantity").head
             val rule = args("rule").head
-            handler.addPortfolio(p.portfolioID, stockC, quantity.toDouble, rule.toDouble)
+
+            var b: Boolean = Await.result(handler.addPortfolio(p.portfolioID, stockC, quantity.toDouble, rule.toDouble), 2.second)
+//            (handler.addPortfolio(p.portfolioID, stockC, quantity.toDouble, rule.toDouble)).map(b => b match {
+//              case true => Redirect(routes.HomeController.viewandeditPortfolio())
+//              case false => Redirect(routes.HomeController.dashboard()).flashing("error" -> s"already have portfolio so go check ML")
+//            })
+
           }
           Redirect(routes.HomeController.viewandeditPortfolio())
         }
