@@ -106,7 +106,7 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
         stockCheck = sgd.stockCode
         val handler = new PortfolioHandler() with PortfolioTable
         (handler.addPortfolio(user + "1",sgd.stockCode,sgd.quantity.toDouble, sgd.rule.toDouble)).map(b => b match {
-          case true => Redirect(routes.HomeController.dashboard())
+          case true => Redirect(routes.HomeController.viewandeditPortfolio())
           case false => Redirect(routes.HomeController.dashboard()).flashing("error" -> s"already have portfolio so go check ML")
         })
       })
@@ -163,9 +163,9 @@ class HomeController @Inject()(mailerClient: MailerClient)(cc: MessagesControlle
             val rule = args("rule").head
             handler.addPortfolio(p.portfolioID, stockC, quantity.toDouble, rule.toDouble)
           }
-          Redirect(routes.HomeController.dashboard())
+          Redirect(routes.HomeController.viewandeditPortfolio())
         }
-        case false => Redirect(routes.HomeController.dashboard()).flashing("error" -> s"already have portfolio so go check ML")
+        case false => Redirect(routes.HomeController.viewandeditPortfolio()).flashing("error" -> s"error in update")
       })
   }
 
