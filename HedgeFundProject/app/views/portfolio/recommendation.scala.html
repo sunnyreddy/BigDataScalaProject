@@ -107,12 +107,14 @@ div.tooltip {
                     <div id="recommendation" >
                         <h1>Get Recommendation !!</h1>
                         <form action="/getRule">
-                            <select name="stockCheck">
-                                <option value="AAPL">APPLE</option>
-                                <option value="MSFT">Microsoft</option>
-                                <option value="IBM">IBM</option>
-                                <option value="TSLA">Tesla</option>
-                            </select>
+<!--                            <select name="stockCheck">-->
+<!--                                <option value="AAPL">APPLE</option>-->
+<!--                                <option value="MSFT">Microsoft</option>-->
+<!--                                <option value="IBM">IBM</option>-->
+<!--                                <option value="TSLA">Tesla</option>-->
+<!--                            </select>-->
+                            <label for="stockSy">Stock Symbol</label>
+                            <input id="stockSy" type="text" name="stockCheck">
                             <input type="submit" value="Get Rules" />
                         </form>
                     </div>
