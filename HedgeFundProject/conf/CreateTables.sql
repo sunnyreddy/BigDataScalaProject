@@ -1,0 +1,17 @@
+CREATE SCHEMA IF NOT EXISTS testscala;
+
+CREATE TABLE testscala.portfolio (
+ PortfolioID    VARCHAR(45) PRIMARY KEY,
+ stockCode      VARCHAR(45) NOT NULL,
+ quantity       DOUBLE NOT NULL,
+ ruleLimit      DOUBLE NOT NULL
+ );
+
+CREATE TABLE testscala.users(
+ USERNAME	VARCHAR(45) NOT NULL PRIMARY KEY,
+ PASSWORD	VARCHAR(45) NOT NULL, 
+ NAME	VARCHAR(45) NOT NULL,
+ EMAIL	VARCHAR(45) NOT NULL,  
+ portfolioID	VARCHAR(45) NOT NULL,
+ availableFund	DOUBLE NOT NULL
+); 
